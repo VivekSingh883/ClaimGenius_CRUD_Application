@@ -1,26 +1,12 @@
-<script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { getUsers } from './api/userAPI';
-import UserTable from './components/UserTable.vue';
-import UserForm from './components/UserForm.vue';
-
-const users = ref<any[]>([]);
-
-onMounted(async () => {
-  users.value = await getUsers();
-});
-
-async function loadUsers() {
-  users.value = await getUsers();
-}
-</script>
 
 <template>
   <div class="container py-3">
     <h1 class="h3 mb-3">CRUD APPLICATION</h1>
-    <UserForm @refresh="loadUsers" />
-    <hr class="my-4" />
-    <UserTable :users="users" @refresh="loadUsers" />
+    <nav class="mb-3">
+      <router-link to="/form" class="btn btn-primary me-2">Open Form</router-link>
+      <router-link to="/table" class="btn btn-secondary">Open Table</router-link>
+    </nav>
+    <router-view />
   </div>
 </template>
 
