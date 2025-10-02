@@ -29,3 +29,4 @@ export const updateUser = async (id: number, data: User) => (await API.put(`/${i
 export const deleteUser = async (id: number) => API.delete(`/${id}`);
 
 
+

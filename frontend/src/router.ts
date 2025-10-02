@@ -1,13 +1,14 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import UserForm from './components/UserForm.vue';
 import UserTable from './components/UserTable.vue';
-import Login from './views/Login.vue';
+import Login from './views/login.vue';
 
 const routes: Array<RouteRecordRaw> = [
   { path: '/login', component: Login },
   { path: '/table', component: UserTable, meta: { requiresAuth: true } },
   { path: '/form', component: UserForm, meta: { requiresAuth: true } },
   { path: '/', redirect: '/login' }  // default route goes to login
+  
 ];
 
 const router = createRouter({

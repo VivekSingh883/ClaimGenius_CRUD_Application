@@ -2,18 +2,28 @@ import { pool } from "../config/db";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
+if(!process.env.JWT_SECRET){
+  throw new Error("JWT_SECRET is not defined in environment variables");
+}
+const JWT_SECRET = process.env.JWT_SECRET ;
 
 export const login = async (username: string, password: string) => {
   // 1. Find user by username
-  const result = await pool.query("SELECT * FROM admins WHERE username = $1", [username]);
-  const user = result.rows[0];
+  const result = await pool.query(
+    "SELECT id, username, role, password_hash FROM admins WHERE username = $1",
+    [username]
+  );
 
-  if (!user) throw new Error("User not found");
+  const user = result.rows[0];
+  if (!user) {
+    throw new Error("User not found");
+  }
 
   // 2. Verify password
   const isMatch = await bcrypt.compare(password, user.password_hash);
-  if (!isMatch) throw new Error("Invalid credentials");
+  if (!isMatch) {
+    throw new Error("Invalid credentials");
+  }
 
   // 3. Generate JWT
   const token = jwt.sign(
@@ -22,6 +32,13 @@ export const login = async (username: string, password: string) => {
     { expiresIn: "1h" }
   );
 
-  // 4. Return token and user info
-  return { token, user: { id: user.id, username: user.username, role: user.role } };
+  // 4. Return token + safe user info
+  return {
+    token,
+    user: {
+      id: user.id,
+      username: user.username,
+      role: user.role,
+    },
+  };
 };

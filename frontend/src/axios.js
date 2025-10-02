@@ -1,6 +1,7 @@
 import axios from "axios";
 const api = axios.create({
     baseURL: "http://localhost:4000/api", // Backend URL
+    withCredentials: true, // Include cookies in requests
 });
 // Axios interceptor to attach JWT token in Authorization header
 api.interceptors.request.use((config) => {

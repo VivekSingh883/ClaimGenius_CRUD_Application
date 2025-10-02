@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
 import type { User } from '../api/userAPI';
 import { getUsers, updateUser, deleteUser } from '../api/userAPI';
-
-// Router instance for logout navigation
-const router = useRouter();
 
 // ----------------- State -----------------
 const users = ref<User[]>([]);
@@ -133,12 +129,6 @@ async function handleDelete(id: number) {
   }
 }
 
-// Logout function
-const logout = () => {
-  localStorage.removeItem('token'); // remove auth token
-  router.push('/login');             // navigate to login
-};
-
 // ----------------- Lifecycle -----------------
 onMounted(() => {
   fetchUsers(1);
@@ -146,10 +136,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- Header with Logout -->
+  <!-- Header -->
   <div class="d-flex justify-content-between align-items-center mb-2">
     <h3>Users</h3>
-    <button class="btn btn-outline-danger btn-sm" @click="logout">Logout</button>
   </div>
 
   <!-- Search Input -->

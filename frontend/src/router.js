@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import UserForm from './components/UserForm.vue';
 import UserTable from './components/UserTable.vue';
-import Login from './views/Login.vue';
+import Login from './views/login.vue';
 const routes = [
     { path: '/login', component: Login },
     { path: '/table', component: UserTable, meta: { requiresAuth: true } },

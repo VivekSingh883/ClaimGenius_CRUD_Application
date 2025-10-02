@@ -33,17 +33,38 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = void 0;
+exports.logout = exports.login = void 0;
 const authService = __importStar(require("../services/authService"));
+// login controller
 const login = async (req, res) => {
     try {
         const { username, password } = req.body;
-        const data = await authService.login(username, password);
-        res.json(data);
+        // Call service to validate user & return token
+        const { token, user } = await authService.login(username, password);
+        // Set cookie with token
+        res.cookie("authToken", token, {
+            httpOnly: true,
+            secure: false,
+            // sameSite: "lax",  
+            maxAge: 3600000, // 1 hour
+        });
+        res.json({ message: "Login successful", user });
     }
     catch (error) {
         res.status(401).json({ error: error.message });
     }
 };
 exports.login = login;
+// Logout Controller Clears the cookie
+const logout = async (req, res) => {
+    try {
+        // Clear cookie
+        res.clearCookie("authToken");
+        res.json({ message: "Logged out successfully" });
+    }
+    catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+exports.logout = logout;
 //# sourceMappingURL=authController.js.map
